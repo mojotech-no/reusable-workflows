@@ -1,0 +1,22 @@
+name: Dependency Review
+
+on:
+  workflow_call:
+  
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Dependency Review
+      uses: actions/dependency-review-action@v4
+      with:
+        fail-on-severity: high
+        # Possible values: Any SPDX-compliant license identifiers or expressions from https://spdx.org/licenses/
+        allow-licenses: GPL-3.0, BSD-3-Clause, MIT
