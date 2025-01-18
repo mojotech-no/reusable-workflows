@@ -1,0 +1,75 @@
+name: Container Scan
+
+on:
+  workflow_call:
+    inputs:
+      image_tag_to_scan:
+        description: "Desired image tag to scan (0.0.0, main..)"
+        required: true
+        type: string
+      runner_type:
+        description: "Desired runner type (ubuntu-latest, ubuntu-latest-m)"
+        required: false
+        type: string
+        default: "ubuntu-latest"
+
+permissions:
+  contents: read
+  packages: read
+  security-events: write
+  actions: read
+
+env:
+  DOCKER_IMAGE_TAG: ${{ inputs.image_tag_to_scan }}
+  GITHUB_REGISTRY: ghcr.io
+
+jobs:
+  sanity-check-inputs:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check input
+      run: |
+        if [[ ${{ inputs.runner_type }} == "ubuntu-latest" ]]; then
+          echo "Running on ubuntu-latest"
+        elif  [[ ${{ inputs.runner_type }} == "ubuntu-latest-m" ]]; then
+          echo "Running on ubuntu-latest-m"
+        else
+          echo "Desired runner type not supported."
+          exit 1
+        fi
+
+  container-scan:
+    needs: sanity-check-inputs
+    runs-on: ${{ inputs.runner_type }}
+    steps:
+    - name: Make lowercase GITHUB_REPOSITORY
+      run: |
+        echo GITHUB_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Log in to the Container registry
+      uses: docker/login-action@v3.3.0
+      with:
+        registry: ${{ env.GITHUB_REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Pull Docker image
+      run: docker pull ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_REPOSITORY }}:${{ env.DOCKER_IMAGE_TAG }}
+
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@0.29.0
+      with:
+        image-ref:  ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_REPOSITORY }}:${{ env.DOCKER_IMAGE_TAG }}
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        severity: 'CRITICAL,HIGH'
+        limit-severities-for-sarif: true
+
+    - name: Upload result to GitHub Code Scanning
+      uses: github/codeql-action/upload-sarif@v3
+      if: always()
+      with:
+        sarif_file: trivy-results.sarif
