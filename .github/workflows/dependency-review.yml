@@ -22,9 +22,4 @@ jobs:
     - name: Dependency Review
       uses: actions/dependency-review-action@v4
       with:
-        fail-on-severity: high
-        # Possible values: Any SPDX-compliant license identifiers or expressions from https://spdx.org/licenses/
-        allow-licenses: GPL-3.0, BSD-3-Clause, MIT
-        # workaround for events other than PR
-        base-ref: ${{ github.event.pull_request.base.sha || 'main' }}
-        head-ref: ${{ github.event.pull_request.head.sha || github.ref }}
+        config-file: './.github/dependency-review-config.yml'
