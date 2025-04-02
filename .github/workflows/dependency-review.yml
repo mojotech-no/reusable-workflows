@@ -24,4 +24,4 @@ jobs:
     - name: Dependency Review
       uses: actions/dependency-review-action@v4
       with:
-        config-file: 'mojotech-no/reusable-workflows/dependency-review-config.yml@main'
+        config-file: 'mojotech-no/reusable-workflows/dependency-review-config.yml@update-licenses'
