@@ -3,11 +3,11 @@ fail_on_scopes:
 - 'runtime'
 - 'development'
 - 'unknown'
-license_check: 'true'
-vulnerability_check: 'true'
+license_check: true
+vulnerability_check: true
 comment_summary_in_pr: 'always'
-show_openssf_scorecard: 'true'
-warn_on_openssf_scorecard_level: '1'
+show_openssf_scorecard: true
+warn_on_openssf_scorecard_level: 1
 # Possible values: Any SPDX-compliant license identifiers or expressions from https://spdx.org/licenses/
 deny_licenses:
 - '0BSD'
