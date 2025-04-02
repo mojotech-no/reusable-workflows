@@ -26,7 +26,35 @@ jobs:
       with:
         fail-on-severity: high
         # Possible values: Any SPDX-compliant license identifiers or expressions from https://spdx.org/licenses/
-        allow-licenses: GPL-3.0, BSD-3-Clause, MIT, Apache-2.0
+        # Licenses considered problematic for most projects
+        deny-licenses:
+          - AGPL-1.0
+          - AGPL-3.0
+          - SSPL-1.0
+          - Commons-Clause
+          - CPAL-1.0
+          - OSL-3.0
+          - EUPL-1.2
+          - NPL-1.0
+          - RPL-1.5
+          - MS-RL
+          - CC-BY-NC-4.0
+          - CC-BY-NC-SA-4.0
+          - GPL-2.0
+          - GPL-3.0
+          - LGPL-2.0
+          - LGPL-2.1
+          - LGPL-3.0
+          - AGPL-1.0-only
+          - AGPL-3.0-only
+          - AGPL-3.0-or-later
+          - CC-BY-ND-4.0
+          - Sleepycat
+          - JSON
+          - WTFPL
+          - Artistic-1.0
+          - CPOL
+          - Prosperity
         # workaround for events other than PR
         base-ref: ${{ github.event.pull_request.base.sha || 'main' }}
         head-ref: ${{ github.event.pull_request.head.sha || github.ref }}
