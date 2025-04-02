@@ -19,7 +19,7 @@ changelog:
     - title: Dependencies
       labels:
         - "dependencies"
-    - title: security 🚓
+    - title: Security 🚓
       labels:
         - "security :police_car:"
     - title: Other Changes 🛠️
