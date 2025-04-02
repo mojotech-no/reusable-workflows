@@ -28,18 +28,11 @@ jobs:
         # Possible values: Any SPDX-compliant license identifiers or expressions from https://spdx.org/licenses/
         # Licenses considered problematic for most projects
         deny-licenses:
-          # Strong Copyleft Licenses
           - GPL-*
           - LGPL-*
-          
-          # Network/Server Copyleft
           - AGPL-*
           - SSPL-1.0
-
-          # Creative Commons Non-Commercial (NC)
           - CC-*
-          
-          # Source-Available & Ethical Licenses
           - Anti-996
           - BUSL-1.1
           - Commons-Clause
@@ -49,8 +42,6 @@ jobs:
           - Hippocratic-2.1
           - Prosperity
           - RSAL-1.0
-          
-          # Other Restrictive Licenses
           - AFL-3.0
           - Artistic-1.0
           - BSD-4-Clause
