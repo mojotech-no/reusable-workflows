@@ -1,0 +1,6 @@
+fail-on-severity: high
+# Possible values: Any SPDX-compliant license identifiers or expressions from https://spdx.org/licenses/
+deny-licenses: BUSL-1.1, Elastic-2.0, Hippocratic-2.1, AFL-3.0, Artistic-1.0, BSD-4-Clause, CPAL-1.0, CPOL-1.02, EUPL-1.2, JSON, MS-RL, NPL-1.0, OSL-3.0, QPL-1.0, RPL-1.5, Sleepycat, WTFPL                                                                                     
+# workaround for events other than PR
+base-ref: ${{ github.event.pull_request.base.sha || 'main' }}
+head-ref: ${{ github.event.pull_request.head.sha || github.ref }}
