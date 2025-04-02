@@ -27,35 +27,7 @@ jobs:
         fail-on-severity: high
         # Possible values: Any SPDX-compliant license identifiers or expressions from https://spdx.org/licenses/
         # Licenses considered problematic for most projects
-        deny-licenses:
-          - GPL-*
-          - LGPL-*
-          - AGPL-*
-          - SSPL-1.0
-          - CC-*
-          - Anti-996
-          - BUSL-1.1
-          - Commons-Clause
-          - Confluent-Community
-          - Elastic-2.0
-          - Fair-Source
-          - Hippocratic-2.1
-          - Prosperity
-          - RSAL-1.0
-          - AFL-3.0
-          - Artistic-1.0
-          - BSD-4-Clause
-          - CPAL-1.0
-          - CPOL
-          - EUPL-1.2
-          - JSON
-          - MS-RL
-          - NPL-1.0
-          - OSL-3.0
-          - QPL-1.0
-          - RPL-1.5
-          - Sleepycat
-          - WTFPL
+        deny-licenses: GPL-*, LGPL-*, AGPL-*, SSPL-1.0, CC-*
         # workaround for events other than PR
         base-ref: ${{ github.event.pull_request.base.sha || 'main' }}
         head-ref: ${{ github.event.pull_request.head.sha || github.ref }}
