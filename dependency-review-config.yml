@@ -14,4 +14,3 @@ allow_licenses:
   - 'Apache-2.0'
   - 'BSD-2-Clause'
   - 'BSD-3-Clause'
-  - 'BSD-2-Clause AND BSD-3-Clause'
