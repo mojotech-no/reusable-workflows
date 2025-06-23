@@ -25,7 +25,7 @@ jobs:
     - name: Dependency Review
       uses: actions/dependency-review-action@v4
       with:
-        config-file: 'mojotech-no/reusable-workflows/dependency-review-config.yml'
+        config-file: 'mojotech-no/reusable-workflows/dependency-review-config.yml@test-lic'
         # workaround for events other than PR
         base-ref: ${{ github.event.pull_request.base.sha || 'main' }}
         head-ref: ${{ github.event.pull_request.head.sha || github.ref }}
