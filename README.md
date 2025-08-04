@@ -1,4 +1,4 @@
-# reusabe-workflows
+# reusable-workflows
 Reusable workflows
 
 ## Pinning version and Dependabot
