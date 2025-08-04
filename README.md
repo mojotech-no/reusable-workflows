@@ -39,6 +39,7 @@ jobs:
 ```
 
 Benefit:
+
 - Central maintenance to this repo.
 - Possible to make this a required workflow for all/select repos using rulesets https://docs.github.com/en/enterprise-cloud@latest/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets .
 
