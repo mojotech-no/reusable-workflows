@@ -3,7 +3,7 @@ Reusable workflows
 
 ## Pinning version and Dependabot
 
-Pin versions to commit SHA's and comment version, example:
+Pin versions to commit SHAs and comment version, example:
 
 ```yaml
 uses: mojotech-no/reusable-workflows/.github/workflows/zizmor.yml@a52c5287aaae4805754ef5914df92f0c6375ad58 # v0.0.0
