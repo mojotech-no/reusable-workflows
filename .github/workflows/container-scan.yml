@@ -12,6 +12,10 @@ on:
         required: false
         type: string
         default: "ubuntu-latest"
+    secrets:
+      ghcr_github_token:
+        description: 'GITHUB_TOKEN needed for ghcr login'
+        required: true
 
 permissions:
   contents: read
@@ -28,8 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check input
-      env:
-        RUNNER_TYPE: ${{ inputs.runner_type }}
       run: |
         if [[ "${RUNNER_TYPE}" == "ubuntu-latest" ]]; then
           echo "Running on ubuntu-latest"
@@ -39,6 +41,8 @@ jobs:
           echo "Desired runner type not supported."
           exit 1
         fi
+      env:
+        RUNNER_TYPE: ${{ inputs.runner_type }}
 
   container-scan:
     needs: sanity-check-inputs
@@ -58,15 +62,15 @@ jobs:
       with:
         registry: ${{ env.GITHUB_REGISTRY }}
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ secrets.ghcr_github_token }}
 
     - name: Pull Docker image
-      run: docker pull ${IMAGE_REF}
+      run: docker pull "${IMAGE_REF}"
       env:
         IMAGE_REF: ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_REPOSITORY }}:${{ env.DOCKER_IMAGE_TAG }}
 
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4 # 0.32.0
+      uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4 # v0.32.0
       with:
         image-ref:  ${{ env.GITHUB_REGISTRY }}/${{ env.GITHUB_REPOSITORY }}:${{ env.DOCKER_IMAGE_TAG }}
         format: 'sarif'
