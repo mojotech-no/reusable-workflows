@@ -11,36 +11,77 @@ on:
 jobs:
   zizmor:
     name: zizmor latest via PyPI
+
     runs-on: ubuntu-latest
+
     permissions:
       security-events: write
       contents: read # only needed for private repos
       actions: read # only needed for private repos
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
           persist-credentials: false
 
+      - name: Detect workflows or actions
+        id: detect_targets
+        run: |
+          set -euo pipefail
+
+          has_workflows=false
+          if [ -d ".github/workflows" ] && find .github/workflows -type f \( -name '*.yml' -o -name '*.yaml' \) -print -quit | grep -q .; then
+            has_workflows=true
+          fi
+
+          has_actions=false
+          if find . \
+            -path './.git' -prune -o \
+            -type f \( -name 'action.yml' -o -name 'action.yaml' -o -name 'action.json' \) \
+            -print -quit | grep -q .; then
+            has_actions=true
+          fi
+
+          if [ "$has_workflows" = true ] || [ "$has_actions" = true ]; then
+            echo "has_targets=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_targets=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No workflows or actions found; skipping zizmor scan." >&2
+          fi
+
+          echo "has_workflows=$has_workflows" >> "$GITHUB_OUTPUT"
+          echo "has_actions=$has_actions" >> "$GITHUB_OUTPUT"
+
+          echo "Workflows detected: $has_workflows"
+          echo "Actions detected: $has_actions"
+
       - name: Install the latest version of uv
+        if: steps.detect_targets.outputs.has_targets == 'true'
         uses: astral-sh/setup-uv@b75a909f75acd358c2196fb9a5f1299a9a8868a4 # v6
 
       - name: Run zizmor 🌈
         id: run_zizmor
+        if: steps.detect_targets.outputs.has_targets == 'true'
         run: |
+          set -o pipefail
+
+          rm -f results.sarif zizmor.log
+
           if uvx zizmor --format sarif . > results.sarif 2>zizmor.log; then
-            echo "has_results=true" >> $GITHUB_OUTPUT
+            echo "has_results=true" >> "$GITHUB_OUTPUT"
           else
-            status=$? # exit status of the previous command
+            status=$?
             echo "zizmor stderr output:" >&2
             cat zizmor.log >&2
             if grep -qi "no inputs collected" zizmor.log; then
               echo "No workflows or actions detected; treating as success." >&2
-              echo "has_results=false" >> $GITHUB_OUTPUT
+              echo "has_results=false" >> "$GITHUB_OUTPUT"
             else
               exit "$status"
             fi
           fi
+
           rm -f zizmor.log
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
