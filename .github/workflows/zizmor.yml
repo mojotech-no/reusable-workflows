@@ -26,11 +26,27 @@ jobs:
         uses: astral-sh/setup-uv@b75a909f75acd358c2196fb9a5f1299a9a8868a4 # v6
 
       - name: Run zizmor 🌈
-        run: uvx zizmor --format sarif . > results.sarif 
+        id: run_zizmor
+        run: |
+          if uvx zizmor --format sarif . > results.sarif 2>zizmor.log; then
+            echo "has_results=true" >> $GITHUB_OUTPUT
+          else
+            status=$? # exit status of the previous command
+            echo "zizmor stderr output:" >&2
+            cat zizmor.log >&2
+            if grep -qi "no inputs collected" zizmor.log; then
+              echo "No workflows or actions detected; treating as success." >&2
+              echo "has_results=false" >> $GITHUB_OUTPUT
+            else
+              exit "$status"
+            fi
+          fi
+          rm -f zizmor.log
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
 
       - name: Upload SARIF file
+        if: steps.run_zizmor.outputs.has_results == 'true'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: results.sarif
