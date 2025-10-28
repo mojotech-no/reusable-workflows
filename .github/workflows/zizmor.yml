@@ -58,7 +58,7 @@ jobs:
 
       - name: Install the latest version of uv
         if: steps.detect_targets.outputs.has_targets == 'true'
-        uses: astral-sh/setup-uv@b75a909f75acd358c2196fb9a5f1299a9a8868a4 # v6
+        uses: astral-sh/setup-uv@85856786d1ce8acfbcc2f13a5f3fbd6b938f9f41 # v7.1.2
 
       - name: Run zizmor 🌈
         id: run_zizmor
@@ -88,7 +88,7 @@ jobs:
 
       - name: Upload SARIF file
         if: steps.run_zizmor.outputs.has_results == 'true'
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: results.sarif
           category: zizmor
