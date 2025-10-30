@@ -34,7 +34,7 @@ permissions:
   actions: read # only needed for private repos
 
 jobs:
-  container-scan:
+  zizmor:
     uses: mojotech-no/reusable-workflows/.github/workflows/zizmor.yml@main
 ```
 
