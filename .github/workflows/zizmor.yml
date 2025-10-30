@@ -33,3 +33,4 @@ jobs:
           min-severity: medium
           min-confidence: medium
           advanced-security: true
+        continue-on-error: true # carry on, even if zizmor fails on "no inputs collected".
