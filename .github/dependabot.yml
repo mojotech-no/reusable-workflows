@@ -11,14 +11,3 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 7
-
-  - package-ecosystem: "uv" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
-    cooldown:
-      default-days: 7
-    groups:
-      all-uv-dependencies:
-        patterns:
-          - "*"
